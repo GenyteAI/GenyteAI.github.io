@@ -81,6 +81,26 @@
             color: var(--primary-black);
         }
 
+        /* Video Section */
+        .video-section {
+            padding: 80px 20px;
+            background: var(--white);
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -585,6 +605,16 @@
         </div>
     </section>
 
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="video-container fade-in">
+            <video controls loop playsinline id="genyte-video">
+                <source src="Genyte1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
     <!-- Large Feature 1 -->
     <section class="section-dark">
         <div class="large-feature">
@@ -805,6 +835,28 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
+
+        // Video autoplay when in viewport
+        const video = document.getElementById('genyte-video');
+        if (video) {
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Play video with sound when it comes into view
+                        video.play().catch(err => {
+                            console.log('Autoplay prevented:', err);
+                        });
+                    } else {
+                        // Pause when out of view
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: 0.5 // Play when 50% of video is visible
+            });
+
+            videoObserver.observe(video);
+        }
 
         // Parallax effect on hero
         let ticking = false;
